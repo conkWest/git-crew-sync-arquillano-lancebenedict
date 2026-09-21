@@ -2,14 +2,21 @@ function isValidShift(hours) {
   return hours > 0 && hours <= 24;
 }
 
-function calculatePay(hours, rate) {
-  if (hours > 8){
-    const regularPay = REGULAR_HOURS_LIMIT * rate;
+function calculatePay(hours, hourlyRate) {
+  const REGULAR_HOURS_LIMIT = 8;
+  const OVERTIME_MULTIPLIER = 1.5;
+  let totalPay = 0;
+
+  if (hours <= REGULAR_HOURS_LIMIT) {
+    totalPay = hours * hourlyRate;
+  } else {
+    const regularPay = REGULAR_HOURS_LIMIT * hourlyRate;
     const overtimeHours = hours - REGULAR_HOURS_LIMIT;
-    const overtimePay = overtimeHours * (rate * 1.5);
-    return Math.floor(regularPay + overtimePay);
+    const overtimePay = overtimeHours * (hourlyRate * OVERTIME_MULTIPLIER);
+    totalPay = regularPay + overtimePay;
   }
-  return Math.floor(hours * rate);
+
+  return Math.round(totalPay * 100) / 100;
 }
 
 module.exports = { isValidShift, calculatePay };
